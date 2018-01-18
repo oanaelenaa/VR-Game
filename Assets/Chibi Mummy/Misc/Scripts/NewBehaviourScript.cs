@@ -10,16 +10,32 @@ public class NewBehaviourScript : MonoBehaviour {
     public float jumpHeight;
     public Camera player;
 
+    public PlayerHealth playerHealth;
+    Animator anim;
+
+    void Awake()
+    {
+        // Set up the reference.
+        anim = GetComponent<Animator>();
+    }
+
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
     }
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
+        /* if (Input.GetKeyUp(KeyCode.Escape))
+         {
+             Application.Quit();
+         }*/
+      /*  if (playerHealth.g <= 0)
         {
-            Application.Quit();
-        }
+            // ... tell the animator the game is over.
+            anim.SetTrigger("GameOver");
+
+        }/*/
     }
 
     void LateUpdate()
@@ -62,4 +78,40 @@ public class NewBehaviourScript : MonoBehaviour {
 
         //rigidbody.AddForce(movement * speed);
     }
+    void OnCollisionEnter(Collision col)
+    {
+        //The other objects is tagged as player
+        // Instantiate(textObject, Vector3(.5, .5, 0.0), Quaternion.identity);
+        //  Application.Quit();
+     //   var cam = Camera.main;
+      //  if(c)
+        print("collisioeeeeeeen");
+      ///  Destroy(gameObject);
+        // Destroy(gameObject);
+    }
+    void OnTriggerEnter(Collider c)
+    {
+        if (c == player)
+        {
+            print("OnTriggerEnter");
+           // Destroy(gameObject);
+            //game over
+
+        }
+    }
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        print("OnTriggerEnter");
+        float pushPower = 2.0F;
+        Rigidbody body = hit.collider.attachedRigidbody;
+        if (body == null || body.isKinematic)
+            return;
+
+        if (hit.moveDirection.y < -0.3F)
+            return;
+
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        body.velocity = pushDir * pushPower;
+    }
+
 }
